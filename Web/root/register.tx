@@ -1,0 +1,49 @@
+%% cascade '_base.tx'
+
+%% override content -> {
+    <div class="row my-4">
+        <div class="col">
+            %% if ( $errors ) { 
+            <h5>There were errors with your request:</h5>
+            <ul>
+            %% for $errors -> $error {
+                <li class="text-danger">[% $error %]</li>
+            %% }
+            </ul>
+            %% }
+            %% if ( $created ) {
+            <h5>Congrats!  An account would be created!</h5>
+            %%  }
+        </div>
+        <div class="col">
+            <form method="POST" action="/register">
+                %% include '_forms/input.tx' { type => 'email', name => 'email',
+                %%   title => 'Email address',
+                %%   help  => 'You will never be emailed, just use a unique email for your login.',
+                %%   value => $form_email
+                %% };
+
+                %% include '_forms/input.tx' { type => 'text', name => 'name',
+                %%   title => 'Display name',
+                %%   help  => 'Your posts will show this name.',
+                %%   value => $form_name
+                %% };
+
+                %% include '_forms/input.tx' { type => 'password', name => 'password',
+                %%   title => 'Password',
+                %%   help  => '',
+                %% };
+
+                %% include '_forms/input.tx' { type => 'password', name => 'confirm',
+                %%   title => 'Confirm Password',
+                %%   help  => '',
+                %% };
+
+                <button type="submit" class="btn btn-primary float-end">Register</button>
+            </form>
+        </div>
+    </div>
+%% }
+
+
+

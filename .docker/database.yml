@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  database:
+    image: postgres:11
+    container_name: housenewswire-database
+    ports:
+        - 127.0.0.1:5432:5432
+    environment:
+      - POSTGRES_PASSWORD=housenewswire
+      - POSTGRES_USER=housenewswire
+      - POSTGRES_DB=housenewswire
+    volumes:
+      - ./etc/schema.sql:/docker-entrypoint-initdb.d/000_schema.sql:ro
+      - database:/var/lib/postgresql/data
+
+
+volumes:
+  database:

@@ -1,0 +1,13 @@
+requires "Catalyst::Runtime";
+requires "Catalyst::Plugin::ConfigLoader";
+requires "Catalyst::Plugin::Static::Simple";
+requires "Catalyst::Action::RenderView";
+requires "Catalyst::Plugin::Static::Simple";
+requires "Catalyst::View::Xslate";
+requires "Catalyst::Plugin::Session";
+requires "Catalyst::Plugin::Session::State::Cookie";
+requires "Catalyst::Plugin::Session::Store::Cookie";
+requires "Catalyst::Model::DBIC::Schema";
+requires "Starman";
+requires "DateTime::Format::Pg";
+requires "Try::Tiny";
