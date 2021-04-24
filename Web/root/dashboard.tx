@@ -1,0 +1,30 @@
+%% cascade '_base.tx'
+
+%% around content -> {
+    <div class="row my-4">
+    <form method="POST" action="/dashboard">
+        <div class="mb-3">
+            <label for="message" class="form-label">Post a Message</label>
+            <textarea class="form-control" name="message" id="message" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary float-end">Post Message</button>
+    </form>
+    </div>
+    <hr />
+
+    %% for $messages -> $message {
+    <div class="card my-4">
+        <div class="card-header">[% $message.author.name %]</div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>[% $message.content %]</p>
+                <footer class="blockquote-footer initialism float-end">
+                    [% $message.created_at.strftime( "%a %d %b @ %H:%M:%S" ) %]
+                </footer>
+            </blockquote>
+        </div>
+    </div>
+    %% }
+%% }
+

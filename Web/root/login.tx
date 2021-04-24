@@ -1,0 +1,38 @@
+%% cascade '_base.tx'
+
+%% override content -> {
+    <div class="row my-4">
+        <div class="col">
+            %% if ( $errors ) { 
+            <h5>There were errors with your request:</h5>
+            <ul>
+            %% for $errors -> $error {
+                <li class="text-danger">[% $error %]</li>
+            %% }
+            </ul>
+            %% }
+            %% if ( $user ) {
+            <h5>Congrats!  You have logged in as [% $user.name %] via [% $user.email %]</h5>
+            %%  }
+        </div>
+        <div class="col">
+            <form method="POST" action="/login">
+                %% include '_forms/input.tx' { type => 'email', name => 'email',
+                %%   title => 'Email address',
+                %%   help  => 'The email account you registered with.',
+                %%   value => $form_email
+                %% };
+
+                %% include '_forms/input.tx' { type => 'password', name => 'password',
+                %%   title => 'Password',
+                %%   help  => '',
+                %% };
+
+                <button type="submit" class="btn btn-primary float-end">Login</button>
+            </form>
+        </div>
+    </div>
+%% }
+
+
+

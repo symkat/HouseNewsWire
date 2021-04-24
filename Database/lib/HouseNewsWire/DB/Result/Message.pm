@@ -1,12 +1,12 @@
 use utf8;
-package HouseNewsWire::DB::Result::Person;
+package HouseNewsWire::DB::Result::Message;
 
 # Created by DBIx::Class::Schema::Loader
 # DO NOT MODIFY THE FIRST PART OF THIS FILE
 
 =head1 NAME
 
-HouseNewsWire::DB::Result::Person
+HouseNewsWire::DB::Result::Message
 
 =cut
 
@@ -29,11 +29,11 @@ use base 'DBIx::Class::Core';
 
 __PACKAGE__->load_components("InflateColumn::DateTime", "InflateColumn::Serializer");
 
-=head1 TABLE: C<person>
+=head1 TABLE: C<message>
 
 =cut
 
-__PACKAGE__->table("person");
+__PACKAGE__->table("message");
 
 =head1 ACCESSORS
 
@@ -42,22 +42,17 @@ __PACKAGE__->table("person");
   data_type: 'integer'
   is_auto_increment: 1
   is_nullable: 0
-  sequence: 'person_id_seq'
+  sequence: 'message_id_seq'
 
-=head2 name
+=head2 author_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
+=head2 content
 
   data_type: 'text'
-  is_nullable: 0
-
-=head2 email
-
-  data_type: 'citext'
-  is_nullable: 0
-
-=head2 is_enabled
-
-  data_type: 'boolean'
-  default_value: true
   is_nullable: 0
 
 =head2 created_at
@@ -74,14 +69,12 @@ __PACKAGE__->add_columns(
     data_type         => "integer",
     is_auto_increment => 1,
     is_nullable       => 0,
-    sequence          => "person_id_seq",
+    sequence          => "message_id_seq",
   },
-  "name",
+  "author_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "content",
   { data_type => "text", is_nullable => 0 },
-  "email",
-  { data_type => "citext", is_nullable => 0 },
-  "is_enabled",
-  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
   "created_at",
   {
     data_type     => "timestamp with time zone",
@@ -102,50 +95,21 @@ __PACKAGE__->add_columns(
 
 __PACKAGE__->set_primary_key("id");
 
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<person_email_key>
-
-=over 4
-
-=item * L</email>
-
-=back
-
-=cut
-
-__PACKAGE__->add_unique_constraint("person_email_key", ["email"]);
-
 =head1 RELATIONS
 
-=head2 auth_password
+=head2 author
 
-Type: might_have
+Type: belongs_to
 
-Related object: L<HouseNewsWire::DB::Result::AuthPassword>
-
-=cut
-
-__PACKAGE__->might_have(
-  "auth_password",
-  "HouseNewsWire::DB::Result::AuthPassword",
-  { "foreign.person_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 messages
-
-Type: has_many
-
-Related object: L<HouseNewsWire::DB::Result::Message>
+Related object: L<HouseNewsWire::DB::Result::Person>
 
 =cut
 
-__PACKAGE__->has_many(
-  "messages",
-  "HouseNewsWire::DB::Result::Message",
-  { "foreign.author_id" => "self.id" },
-  { cascade_copy => 0, cascade_delete => 0 },
+__PACKAGE__->belongs_to(
+  "author",
+  "HouseNewsWire::DB::Result::Person",
+  { id => "author_id" },
+  { is_deferrable => 0, on_delete => "NO ACTION", on_update => "NO ACTION" },
 );
 
 =head2 messages_read
@@ -159,13 +123,13 @@ Related object: L<HouseNewsWire::DB::Result::MessageRead>
 __PACKAGE__->has_many(
   "messages_read",
   "HouseNewsWire::DB::Result::MessageRead",
-  { "foreign.person_id" => "self.id" },
+  { "foreign.message_id" => "self.id" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
 
 # Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-04-24 06:54:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qX5wmbss+LHpzRnpdXBBUA
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9tVENuC5592wbQCdbQ96iQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
