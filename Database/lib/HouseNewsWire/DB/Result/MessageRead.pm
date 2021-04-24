@@ -49,6 +49,12 @@ __PACKAGE__->table("message_read");
   is_foreign_key: 1
   is_nullable: 0
 
+=head2 is_read
+
+  data_type: 'boolean'
+  default_value: true
+  is_nullable: 0
+
 =head2 created_at
 
   data_type: 'timestamp with time zone'
@@ -62,6 +68,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "person_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
+  "is_read",
+  { data_type => "boolean", default_value => \"true", is_nullable => 0 },
   "created_at",
   {
     data_type     => "timestamp with time zone",
@@ -117,8 +125,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-04-24 06:54:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sbMQfxklrYEht3MneCZ8Pw
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2021-04-24 08:04:47
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vIlqT7f0RVQCEadDuM8Srw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

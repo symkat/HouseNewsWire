@@ -26,6 +26,7 @@ CREATE TABLE message (
 CREATE TABLE message_read (
     message_id                  int             not null references message(id),
     person_id                   int             not null references person(id),
+    is_read                     boolean         not null default true,
     created_at                  timestamptz     not null default current_timestamp,
     PRIMARY KEY (message_id, person_id)    
 );

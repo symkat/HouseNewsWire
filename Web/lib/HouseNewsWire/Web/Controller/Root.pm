@@ -36,12 +36,31 @@ sub get_dashboard :Chained('base') PathPart('dashboard') Args(0) Method('GET') {
         $c->detach;
     }
 
-    # Push the 100 latest posts into the stash.
+    # Push the 100 latest posts into the stash, don't include messages already 
+    # marked as read.
     push @{$c->stash->{messages}}, $c->model('DB')->resultset('Message')->search( 
-        {},
-        { order_by => { -desc => 'me.created_at' }, rows => 100 }
+        { 
+            'messages_read.person_id' => [ undef, $c->stash->{user}->id ],
+            'messages_read.is_read'   => [ undef, 0 ],
+        },
+        { order_by => { -desc => 'me.created_at' }, rows => 100, join => 'messages_read' }
     )->all;
+}
 
+sub post_dashboard_message :Chained('base') PathPart('dashboard') Args(1) Method('POST') {
+    my ( $self, $c, $message_id ) = @_;
+
+    # Is there a valid user logged in?  - If not, send them to the login page.
+    if ( ! $c->stash->{user} ) {
+        $c->res->redirect( $c->uri_for_action('/get_login') );
+        $c->detach;
+    }
+
+    $c->stash->{user}->create_related('messages_read', {
+        message_id => $message_id,
+    });
+
+    $c->res->redirect( $c->uri_for_action( '/get_dashboard' ) );
 }
 
 sub post_dashboard :Chained('base') PathPart('dashboard') Args(0) Method('POST') {
