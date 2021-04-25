@@ -26,64 +26,13 @@ sub index :Chained('base') PathPart('') Args(0) {
     my ( $self, $c ) = @_;
 }
 
-sub get_dashboard :Chained('base') PathPart('dashboard') Args(0) Method('GET') {
+sub get_logout :Chained('base') PathPart('logout') Args(0) Method('GET') {
     my ( $self, $c ) = @_;
-    $c->stash->{template} = 'dashboard.tx';
 
-    # Is there a valid user logged in?  - If not, send them to the login page.
-    if ( ! $c->stash->{user} ) {
-        $c->res->redirect( $c->uri_for_action('/get_login') );
-        $c->detach;
-    }
+    delete $c->session->{uid};
 
-    # Push the 100 latest posts into the stash, don't include messages already 
-    # marked as read.
-    push @{$c->stash->{messages}}, $c->model('DB')->resultset('Message')->search( 
-        { 
-            'messages_read.person_id' => [ undef, $c->stash->{user}->id ],
-            'messages_read.is_read'   => [ undef, 0 ],
-        },
-        { order_by => { -desc => 'me.created_at' }, rows => 100, join => 'messages_read' }
-    )->all;
+    $c->res->redirect( $c->uri_for_action( '/get_login' ) );
 }
-
-sub post_dashboard_message :Chained('base') PathPart('dashboard') Args(1) Method('POST') {
-    my ( $self, $c, $message_id ) = @_;
-
-    # Is there a valid user logged in?  - If not, send them to the login page.
-    if ( ! $c->stash->{user} ) {
-        $c->res->redirect( $c->uri_for_action('/get_login') );
-        $c->detach;
-    }
-
-    $c->stash->{user}->create_related('messages_read', {
-        message_id => $message_id,
-    });
-
-    $c->res->redirect( $c->uri_for_action( '/get_dashboard' ) );
-}
-
-sub post_dashboard :Chained('base') PathPart('dashboard') Args(0) Method('POST') {
-    my ( $self, $c ) = @_;
-    $c->stash->{template} = 'dashboard.tx';
-    
-    # Is there a valid user logged in?  - If not, send them to the login page.
-    if ( ! $c->stash->{user} ) {
-        $c->res->redirect( $c->uri_for_action('/get_login') );
-        $c->detach;
-    }
-
-    # Get the message contents.
-    my $message = $c->req->body_data->{message};
-
-    # Store the message in the database.
-    $c->stash->{user}->create_related( 'messages', {
-        content => $message,
-    });
-
-    $c->res->redirect( $c->uri_for_action( '/get_dashboard' ) );
-}
-
 
 sub get_login :Chained('base') PathPart('login') Args(0) Method('GET') {
     my ( $self, $c ) = @_;

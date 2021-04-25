@@ -1,12 +1,19 @@
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
+        %% if ( defined $user ) {
+            <a class="navbar-brand" href="/dashboard">House News Wire</a>
+        %% } else {
             <a class="navbar-brand" href="/">House News Wire</a>
+        %% }
 
             <div class="navbar-nav justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link selected" href="/auth/register">Register</a>
-                    </li>
+                %% if ( defined $user ) {
+                    <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+                %% } else {
+                    <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                %% }
                 </ul>
             </div>
         </div>

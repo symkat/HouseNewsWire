@@ -1,0 +1,44 @@
+- name: db
+  desc: "Control Devel DB Only"
+  children:
+    - name: start
+      desc: "Start devel db on localhost via docker."
+      shell:
+        - docker-compose --project-directory ./Database -f ./.docker/database.yml -d up
+    - name: stop
+      desc: "Stop devel db on localhost via docker."
+      shell:
+        - docker-compose --project-directory ./Database -f ./.docker/database.yml down
+    - name: status
+      desc: "Show status of devel db."
+      shell:
+        - docker-compose --project-directory ./Database -f ./.docker/database.yml ps
+    - name: reset
+      desc: "Wipe devel db data."
+      shell: 
+        - docker-compose --project-directory ./Database -f ./.docker/database.yml down -v
+
+- name: docker
+  desc: "Run Docker Container Environment (Web + DB)"
+  children:
+    - name: start
+      desc: "Start Docker Container Environment"
+      shell:
+        - docker-compose --project-directory ./ -f ./.docker/housenewswire.yml -d up
+    - name: stop
+      desc: "Stop Docker Container Environment"
+      shell:
+        - docker-compose --project-directory ./ -f ./.docker/housenewswire.yml down
+    - name: status
+      desc: "Show status of Docker Container Environment"
+      shell:
+        - docker-compose --project-directory ./ -f ./.docker/housenewswire.yml ps
+    - name: reset
+      desc: "Wipe data from Docker Container Environment"
+      shell: 
+        - docker-compose --project-directory ./ -f ./.docker/housenewswire.yml down -v
+
+- name: build
+  desc: "Build HouseNewsWire container"
+  shell:
+      - docker build . -t symkat/housenewswire -f .docker/housenewswire.dockerfile

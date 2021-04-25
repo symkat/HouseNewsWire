@@ -11,3 +11,4 @@ requires "Catalyst::Model::DBIC::Schema";
 requires "Starman";
 requires "DateTime::Format::Pg";
 requires "Try::Tiny";
+requires "HouseNewsWire::DB";
