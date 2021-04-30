@@ -4,7 +4,7 @@
     - name: start
       desc: "Start devel db on localhost via docker."
       shell:
-        - docker-compose --project-directory ./Database -f ./.docker/database.yml -d up
+        - docker-compose --project-directory ./Database -f ./.docker/database.yml up
     - name: stop
       desc: "Stop devel db on localhost via docker."
       shell:
@@ -24,7 +24,7 @@
     - name: start
       desc: "Start Docker Container Environment"
       shell:
-        - docker-compose --project-directory ./ -f ./.docker/housenewswire.yml -d up
+        - docker-compose --project-directory ./ -f ./.docker/housenewswire.yml up
     - name: stop
       desc: "Stop Docker Container Environment"
       shell:
