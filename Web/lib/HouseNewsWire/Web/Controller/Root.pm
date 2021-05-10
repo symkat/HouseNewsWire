@@ -64,6 +64,9 @@ sub post_login :Chained('base') PathPart('login') Args(0) Method('POST') {
 
     # Store the user id in the session.
     $c->session->{uid} = $person->id;
+    
+    # Send the user to the dashboard once they have logged in.
+    $c->res->redirect( $c->uri_for_action( '/dashboard/get_dashboard' ) );
 }
 
 sub get_register :Chained('base') PathPart('register') Args(0) Method('GET') {
@@ -111,9 +114,12 @@ sub post_register :Chained('base') PathPart('register') Args(0) Method('POST') {
         push @{$c->stash->{errors}}, "Account could not be created: $_";
         $c->detach;
     };
+    
+    # Authorize the user into the account they created.
+    $c->session->{uid} = $person->id;
 
     # Send the user to the dashboard once they have made an account.
-    $c->res->redirect( $c->uri_for_action( '/get_dashboard' ) );
+    $c->res->redirect( $c->uri_for_action( '/dashboard/get_dashboard' ) );
 }
 
 sub end :ActionClass('RenderView') { }

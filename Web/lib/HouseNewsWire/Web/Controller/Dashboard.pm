@@ -29,7 +29,7 @@ sub post_dashboard_message :Chained('base') PathPart('') Args(1) Method('POST') 
         message_id => $message_id,
     });
 
-    $c->res->redirect( $c->uri_for_action( '/get_dashboard' ) );
+    $c->res->redirect( $c->uri_for_action( '/dashboard/get_dashboard' ) );
 }
 
 sub post_dashboard :Chained('base') PathPart('') Args(0) Method('POST') {
@@ -44,7 +44,7 @@ sub post_dashboard :Chained('base') PathPart('') Args(0) Method('POST') {
         content => $message,
     });
 
-    $c->res->redirect( $c->uri_for_action( '/get_dashboard' ) );
+    $c->res->redirect( $c->uri_for_action( '/dashboard/get_dashboard' ) );
 }
 
 __PACKAGE__->meta->make_immutable;
