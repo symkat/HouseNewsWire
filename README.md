@@ -8,6 +8,35 @@ You can try out the application at [House News Wire](https://housenewswire.com/)
 
 ## Running With Docker
 
+This docker-compose.yml file will start HouseNewsWire and it will be accessable at [http://127.0.0.1:5000](http://127.0.0.1:5000).
+
+```yaml
+version: '3'
+
+services:
+  website:
+    image: symkat/housenewswire:latest
+    container_name: hnw-web
+    ports:
+        - 5000:5000
+    volumes:
+      - ./.docker/housenewswire/dbic.yaml:/app/dbic.yaml:ro
+  database:
+    image: postgres:11
+    container_name: hnw-db
+    ports:
+        - 127.0.0.1:5432:5432
+    environment:
+      - POSTGRES_PASSWORD=housenewswire
+      - POSTGRES_USER=housenewswire
+      - POSTGRES_DB=housenewswire
+    volumes:
+      - ./Database/etc/schema.sql:/docker-entrypoint-initdb.d/000_schema.sql:ro
+      - database:/var/lib/postgresql/data
+
+volumes:
+  database:
+```
 
 ## Forking and Development Environment
 
