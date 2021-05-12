@@ -47,8 +47,7 @@
 %% }
 
 %% override content -> {
-
-<p style="margin-top: 1.5em">HouseNewsWire is meant to be a starting point for building your own webapp.  It is a fully functional webapp that supports user registration, login.  It has a simple dashboard with one to many message posting and per-user mark-as-read feature.</p>
+            <p style="margin-top: 1.5em">HouseNewsWire is meant to be a starting point for building your own webapp.  It is a fully functional webapp that supports user registration, login.  It has a simple dashboard with one to many message posting and per-user mark-as-read feature.</p>
 
 <p>The creation process is detailed <a href="https://modfoss.com/building-house-new-wire.html">in this blog post</a> so that one could follow that guide and arrive at having written the same application.  The repository created in that documentation is available <a href="https://github.com/symkat/HouseNewsWire/">on GitHub @ symkat/HouseNewsWire</a>.</p>
 
@@ -67,23 +66,41 @@ services:
     container_name: hnw-web
     ports:
         - 5000:5000
-    volumes:
-      - ./.docker/housenewswire/dbic.yaml:/app/dbic.yaml:ro
   database:
     image: postgres:11
     container_name: hnw-db
-    ports:
-        - 127.0.0.1:5432:5432
     environment:
       - POSTGRES_PASSWORD=housenewswire
       - POSTGRES_USER=housenewswire
       - POSTGRES_DB=housenewswire
     volumes:
-      - ./Database/etc/schema.sql:/docker-entrypoint-initdb.d/000_schema.sql:ro
+      - ./schema.sql:/docker-entrypoint-initdb.d/000_schema.sql:ro
       - database:/var/lib/postgresql/data
 
 volumes:
   database:
+
+</code></pre>
+
+<p>Make sure to bring in the schema.sql file to the same directory as the <span class="inline-code">docker-compose.yaml</span> file.</p>
+
+<pre><code class="bash">
+curl -Lo schema.sql https://raw.githubusercontent.com/symkat/HouseNewsWire/master/Database/etc/schema.sql
+
+</code></pre>
+
+<p>Once these files exist, you should be able to start HouseNewsWire with <span class="inline-code">docker-compose</span>:</p>
+
+<pre><code class="bash">
+symkat@test:~/hnw$ ls
+docker-compose.yml  schema.sql
+symkat@test:~/hnw$ docker-compose up
+symkat@test:~/hnw$ docker-compose up
+Starting hnw-db  ... done
+Starting hnw-web ... done
+Attaching to hnw-db, hnw-web
+hnw-db      | 
+hnw-db      | PostgreSQL Database directory appears to contain a database; Skipping initialization
 
 </code></pre>
 

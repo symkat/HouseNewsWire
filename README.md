@@ -19,23 +19,39 @@ services:
     container_name: hnw-web
     ports:
         - 5000:5000
-    volumes:
-      - ./.docker/housenewswire/dbic.yaml:/app/dbic.yaml:ro
   database:
     image: postgres:11
     container_name: hnw-db
-    ports:
-        - 127.0.0.1:5432:5432
     environment:
       - POSTGRES_PASSWORD=housenewswire
       - POSTGRES_USER=housenewswire
       - POSTGRES_DB=housenewswire
     volumes:
-      - ./Database/etc/schema.sql:/docker-entrypoint-initdb.d/000_schema.sql:ro
+      - ./schema.sql:/docker-entrypoint-initdb.d/000_schema.sql:ro
       - database:/var/lib/postgresql/data
 
 volumes:
   database:
+```
+
+Make sure to bring in the schema.sql file to the same directory as the `docker-compose.yaml` file.
+
+```bash
+curl -Lo schema.sql https://raw.githubusercontent.com/symkat/HouseNewsWire/master/Database/etc/schema.sql
+```
+
+Once these files exist, you should be able to start HouseNewsWire with `docker-compose`:
+
+```bash
+symkat@test:~/hnw$ ls
+docker-compose.yml  schema.sql
+symkat@test:~/hnw$ docker-compose up
+symkat@test:~/hnw$ docker-compose up
+Starting hnw-db  ... done
+Starting hnw-web ... done
+Attaching to hnw-db, hnw-web
+hnw-db      | 
+hnw-db      | PostgreSQL Database directory appears to contain a database; Skipping initialization
 ```
 
 ## Forking and Development Environment
